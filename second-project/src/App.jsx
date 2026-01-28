@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
+import Card from './components/Card'
+import ExpenseList from './ExpenseList';
+import ExpenseForm from './ExpenseForm';
+function createID(){
+  if(typeof crypto !== "undefined" && crypto.randomUUID){
+  console.log(crypto.randomUUID())
+    return crypto.randomUUID(); 
+  }
+return `${Date.now()}+${Math.random().toString(16).slice(2)}`
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+ c
+  const [expenses, setExpenses] = useState([
+    {id:createId(), title:"Mobile", amount: 1000, category:"Forsale"},
+    {id:createId(), title:"Computer", amount: 100, category:"Bills"},
+  ]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  function handleAddExpense(data){
+    const newExpense = {id: createId(), ...data};
+    setExpenses((prev)=> [newExpense, ...prev])
+  }
+  
+return (
+ <div className="page">
+    <header className="header">
+      <div><h1 className="title">Expense Tracker Application</h1>
+      <p className="subtitle">Weel 1 + Week 2 Practice Project</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </header>
+  <Card title={"Add Expense"}>
+  <ExpenseForm onAddExpense={handleAddExpense}></ExpenseForm>
+  </Card>
+
+    <Card title={"Expenses"}>
+ <ExpenseList expenses={expenses}>
+ </ExpenseList>
+    </Card>
+  </div>
+)
+ 
 }
 
 export default App
